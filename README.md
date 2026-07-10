@@ -16,7 +16,11 @@ Kitty sidesteps this by reading the foreground process's cwd directly from
 the OS, but Ghostty does not. This plugin fixes the experience on Ghostty
 (and any other OSC 7-aware terminal) by making yazi itself report its cwd.
 
-## Install
+## Compatibility
+
+Maintained against Yazi/Ya `26.5.6`.
+
+## Installation
 
 With `ya pkg`:
 
@@ -42,18 +46,23 @@ require("osc7"):setup()
 That's it. Open yazi, navigate around, then create a new terminal split —
 it will open in yazi's current directory.
 
+Calling `setup()` more than once does not register duplicate `cd` handlers.
 
 ## How it works
 
 The plugin subscribes to yazi's `cd` event and writes
 
 ```
-ESC ] 7 ; kitty-shell-cwd://<hostname>/<url-encoded-path> BEL
+ESC ] 7 ; kitty-shell-cwd://localhost/<url-encoded-path> BEL
 ```
 
 directly to `/dev/tty` (yazi owns stdout for its TUI). Ghostty (and kitty)
 update their tracked cwd accordingly, so the next split/tab created by the
-terminal inherits the directory you are browsing inside yazi.
+terminal inherits the directory you are browsing inside yazi. If yazi does not
+provide current-directory metadata for an event, the plugin skips that emission.
+If metadata is inaccessible, the plugin skips that emission.
+Paths are percent-encoded byte by byte, including spaces, `#`, quotes, and
+non-ASCII UTF-8 bytes.
 
 ### Why `kitty-shell-cwd://localhost/…`?
 
@@ -79,4 +88,4 @@ This is scheme-valid, host-valid, and machine-agnostic.
 
 ## License
 
-MIT
+MIT License - see [LICENSE](LICENSE) file for details.
