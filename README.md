@@ -18,7 +18,7 @@ the OS, but Ghostty does not. This plugin fixes the experience on Ghostty
 
 ## Compatibility
 
-Maintained against Yazi/Ya `26.8.15`.
+Maintained against Yazi/Ya `26.9.1`.
 
 ## Installation
 
